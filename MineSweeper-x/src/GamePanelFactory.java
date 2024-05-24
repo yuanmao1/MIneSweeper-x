@@ -9,7 +9,7 @@ public class GamePanelFactory {
     }
 
     public static void switchToGrassField(JFrame frame, int rows, int cols) {
-        GrassFieldPanel grassFieldPanel = new GrassFieldPanel(rows, cols);
+        GrassFieldPanel grassFieldPanel = new GrassFieldPanel(rows, cols, Difficulty.getEasy());
         ComponentAssembler.assemble(frame, grassFieldPanel);
     }
 }
@@ -20,9 +20,15 @@ class config {
 
 class GrassFieldPanel extends JPanel implements IGamePanel {
     private GrassCell grassCellArray[][] = null;
+    private int rowCount = 0;
+    private int colCount = 0;
 
-    public GrassFieldPanel(int rows, int cols) {
+    private Player player;
+
+    public GrassFieldPanel(int rows, int cols, Difficulty diff) {
         grassCellArray = new GrassCell[rows][cols];
+        this.rowCount = rows;
+        this.colCount = cols;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 grassCellArray[i][j] = new GrassCell(0);
@@ -30,6 +36,13 @@ class GrassFieldPanel extends JPanel implements IGamePanel {
         }
 
         this.setPreferredSize(new Dimension(config.cellSize * cols, config.cellSize * rows));
+
+        if (diff == null) {
+            throw new IllegalArgumentException("Difficulty cannot be null.");
+        }
+        setAllMine(diff);
+
+        findASafePlaceToPutThePlayer();
     }
 
     public void paint(Graphics g) {
@@ -40,6 +53,11 @@ class GrassFieldPanel extends JPanel implements IGamePanel {
                     grassCellArray[i][j].paintSelf(g, i * config.cellSize, j * config.cellSize, config.cellSize, config.cellSize);
                 }
             }
+
+
+            if (player!= null) {
+                player.paintSelf(g, player.getCol() * config.cellSize, player.getRow() * config.cellSize);
+            }
         } catch (NullPointerException e) {
             // ignore
         }
@@ -48,6 +66,138 @@ class GrassFieldPanel extends JPanel implements IGamePanel {
     public String getTitle() {
         return "Grass Field";
     }
+
+    public void setAllMine(Difficulty diff) {
+        int numberOfMines = (int) (diff.getMineProbability() * (rowCount * colCount));
+        int currentMineLevel = 1;
+        for (int i = 0; i < numberOfMines; i++) {
+            int row = (int) (Math.random() * rowCount);
+            int col = (int) (Math.random() * colCount);
+            if (grassCellArray[row][col].getMineLevel() == 0) {
+                grassCellArray[row][col].setMineLevel(currentMineLevel);
+                currentMineLevel++;
+                if (currentMineLevel > 7) {
+                    currentMineLevel = 1;
+                }
+            } else {
+                i--; // try again
+            }
+        }
+    }
+
+    public void findASafePlaceToPutThePlayer() {
+        for (int i = 0; i < rowCount; i++) {
+            for (int j = 0; j < colCount; j++) {
+                if (grassCellArray[i][j].getMineLevel() == 0) {
+                    player = new Player(rowCount, colCount);
+                    player.setRow(i);
+                    player.setCol(j);
+                }
+            }
+        }
+    }
+
+
+}
+
+class Player {
+    private int row = -1;
+    public int getRow() {
+        return row;
+    }
+    public void setRow(final int row) {
+        this.row = row;
+    }
+    private int col = -1;
+    public int getCol() {
+        return col;
+    }
+    public void setCol(final int col) {
+        this.col = col;
+    }
+
+    private int rowMax;
+    private int colMax;
+    private void setMax(final int rowMax, final int colMax) {
+        if (rowMax <= 0 || colMax <= 0) {
+            throw new IllegalArgumentException("Row and column max must be greater than 0.");
+        }
+        this.rowMax = rowMax;
+        this.colMax = colMax;
+    }
+    public Player(final int rowMax, final int colMax) {
+        setMax(rowMax, colMax);
+    }
+
+    private ImageIcon imageIcon = ImageHolder.frontMan;
+
+    public void paintSelf(Graphics g, int x, int y) {
+        if (g == null) {
+            throw new IllegalArgumentException("Graphics object cannot be null.");
+        }
+
+        g.drawImage(imageIcon.getImage(), x, y, null);
+
+        System.out.println("paintSelf: " + " at " + x + ", " + y);
+    }
+
+    public void downMove() {
+        if (row < rowMax - 1) {
+            row++;
+        }
+        imageIcon = ImageHolder.frontMan;
+    }
+
+    public void upMove() {
+        if (row > 0) {
+            row--;
+        }
+        imageIcon = ImageHolder.frontMan;
+    }
+
+    public void leftMove() {
+        if (col > 0) {
+            col--;
+        }
+        imageIcon = ImageHolder.frontMan;
+    }
+
+    public void rightMove() {
+        if (col < colMax - 1) {
+            col++;
+        }
+        imageIcon = ImageHolder.frontMan;
+    }
+
+
+}
+
+class Difficulty {
+    private double mineProbability = 0;
+    public double getMineProbability() {
+        return mineProbability;
+    }
+    public void setMineProbability(final double mineProbability) {
+        if (mineProbability < 0 || mineProbability > 0.90) {
+            throw new IllegalArgumentException("Mine probability must be between 0 and 0.90.");
+        }
+        this.mineProbability = mineProbability;
+    }
+
+    public Difficulty(double mineProbability) {
+        this.setMineProbability(mineProbability);
+    }
+
+    public static Difficulty getEasy() {
+        return new Difficulty(0.12);
+    }
+    public static Difficulty getMedium() {
+        return new Difficulty(0.15);
+    }
+    public static Difficulty getHard() {
+        return new Difficulty(0.17);
+    }
+
 }
 
 class GrassCell {

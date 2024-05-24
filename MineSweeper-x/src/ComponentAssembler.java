@@ -1,5 +1,6 @@
 import javax.swing.*;
 
+
 public class ComponentAssembler {
     public static void assemble(JFrame frame, IGamePanel gamePanel) {
         if (frame == null) {
