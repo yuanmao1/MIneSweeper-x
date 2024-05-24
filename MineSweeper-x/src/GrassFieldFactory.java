@@ -1,22 +1,37 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class GrassFieldTest {
+public class GrassFieldFactory {
     public static void main(String[] args) {
-        JFrame grassField = new GrassField(10, 10);
+         JFrame frame = new JFrame();
+         switchToGrassField(frame, 10, 10);
+    }
+
+    public static void switchToGrassField(JFrame frame, int rows, int cols) {
+        if (frame == null) {
+            throw new IllegalArgumentException("Frame object cannot be null.");
+        }
+        frame.getContentPane().removeAll();
+        frame.setTitle("Grass Field");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBounds(100, 100, config.cellSize * cols, config.cellSize * rows);
+        frame.setLayout(null);
+
+        frame.setContentPane(new InnerJPanel(rows, cols));
+
+        frame.pack();
+        frame.setVisible(true);
     }
 }
 
-class GrassField extends JFrame {
-    Cell cellArray[][] = null;
-    final InnerJPanel panel = new InnerJPanel();
+class config {
+    public static int cellSize = 40;
+}
 
-    public GrassField(int rows, int cols) {
-        super("Grass Field");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 25 * cols, 25 * rows);
+class InnerJPanel extends JPanel {
+    private Cell cellArray[][] = null;
 
-        setLayout(null);
+    public InnerJPanel(int rows, int cols) {
         cellArray = new Cell[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -24,36 +39,20 @@ class GrassField extends JFrame {
             }
         }
 
-        panel.setCellArray(cellArray);
-        panel.setPreferredSize(new Dimension(25 * cols, 25 * rows));
-
-        setContentPane(panel);
-        this.pack();
-
-        setVisible(true);
-
-        panel.repaint();
+        this.setPreferredSize(new Dimension(config.cellSize * cols, config.cellSize * rows));
     }
-}
-
-class InnerJPanel extends JPanel {
-    private Cell cellArray[][] = null;
 
     public void paint(Graphics g) {
         super.paint(g);
         try {
             for (int i = 0; i < cellArray.length; i++) {
                 for (int j = 0; j < cellArray[i].length; j++) {
-                    cellArray[i][j].paintSelf(g, i * 25, j * 25, 25, 25);
+                    cellArray[i][j].paintSelf(g, i * config.cellSize, j * config.cellSize, config.cellSize, config.cellSize);
                 }
             }
         } catch (NullPointerException e) {
             // ignore
         }
-    }
-
-    public void setCellArray(Cell cellArray[][]) {
-        this.cellArray = cellArray;
     }
 }
 
@@ -108,13 +107,10 @@ class Cell {
 
         g.setColor(Color.BLUE);
         g.setFont(new Font("Arial", Font.PLAIN, 10));
-        g.drawString(text, x + width / 2 - g.getFontMetrics().stringWidth(text),
+        g.drawString(text, x + width / 2 - g.getFontMetrics().stringWidth(text) / 2,
                 y + height / 2 - g.getFontMetrics().getAscent() / 2);
 
         System.out.println("paintSelf: " + text + " at " + x + ", " + y + " with size " + width + "x" + height);
     }
 }
 
-class ImageHolder {
-    public static final ImageIcon blank = new ImageIcon("resources/images/num0.png");
-}

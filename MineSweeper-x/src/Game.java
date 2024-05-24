@@ -1,5 +1,7 @@
+import javax.swing.*;
+
 public class Game {
-    Game(){
+    Game(JFrame frame){
         
     }
 }
