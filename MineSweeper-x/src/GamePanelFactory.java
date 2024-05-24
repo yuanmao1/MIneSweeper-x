@@ -1,26 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class GrassFieldFactory {
+public class GamePanelFactory {
     public static void main(String[] args) {
          JFrame frame = new JFrame();
          switchToGrassField(frame, 10, 10);
     }
 
     public static void switchToGrassField(JFrame frame, int rows, int cols) {
-        if (frame == null) {
-            throw new IllegalArgumentException("Frame object cannot be null.");
-        }
-        frame.getContentPane().removeAll();
-        frame.setTitle("Grass Field");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBounds(100, 100, config.cellSize * cols, config.cellSize * rows);
-        frame.setLayout(null);
-
-        frame.setContentPane(new InnerJPanel(rows, cols));
-
-        frame.pack();
-        frame.setVisible(true);
+        GrassFieldPanel grassFieldPanel = new GrassFieldPanel(rows, cols);
+        ComponentAssembler.assemble(frame, grassFieldPanel);
     }
 }
 
@@ -28,10 +17,10 @@ class config {
     public static int cellSize = 40;
 }
 
-class InnerJPanel extends JPanel {
+class GrassFieldPanel extends JPanel implements IGamePanel {
     private Cell cellArray[][] = null;
 
-    public InnerJPanel(int rows, int cols) {
+    public GrassFieldPanel(int rows, int cols) {
         cellArray = new Cell[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -53,6 +42,10 @@ class InnerJPanel extends JPanel {
         } catch (NullPointerException e) {
             // ignore
         }
+    }
+
+    public String getTitle() {
+        return "Grass Field";
     }
 }
 
@@ -106,7 +99,7 @@ class Cell {
         }
 
         g.setColor(Color.BLUE);
-        g.setFont(new Font("Arial", Font.PLAIN, 10));
+        //g.setFont(new Font("Arial", Font.PLAIN, 10));
         g.drawString(text, x + width / 2 - g.getFontMetrics().stringWidth(text) / 2,
                 y + height / 2 - g.getFontMetrics().getAscent() / 2);
 
