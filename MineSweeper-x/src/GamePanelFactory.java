@@ -15,7 +15,7 @@ public class GamePanelFactory {
 }
 
 class config {
-    public static int cellSize = 40;
+    public static int cellSize = 25;
 }
 
 class GrassFieldPanel extends JPanel implements IGamePanel {
@@ -92,17 +92,18 @@ class GrassCell {
 
         g.drawImage(imageIcon.getImage(), x, y, null);
 
-        String text = "NONE";
-        if (mineLevel >=  0) {
+        String text = "";
+        if (numberMark >= 0) {
+            text = "<" + numberMark + ">";
+        }
+        if (mineLevel > 0) { //is mine
             text = "M" + mineLevel;
-        } else if (numberMark >= 0) {
-            text = "+" + numberMark;
         }
 
         g.setColor(Color.BLUE);
-        //g.setFont(new Font("Arial", Font.PLAIN, 10));
+        g.setFont(new Font("Arial", Font.PLAIN, 12));
         g.drawString(text, x + width / 2 - g.getFontMetrics().stringWidth(text) / 2,
-                y + height / 2 - g.getFontMetrics().getAscent() / 2);
+                y + height / 2 + g.getFontMetrics().getAscent() / 2);
 
         System.out.println("paintSelf: " + text + " at " + x + ", " + y + " with size " + width + "x" + height);
     }
