@@ -1,7 +1,10 @@
 import javax.swing.*;
-
+import java.awt.*;
+import java.awt.event.*;
 public class Game {
-    Game(JFrame frame){
-        
+    Game(){
+
     }
+    Game(JFrame frame){}
+
 }

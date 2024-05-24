@@ -6,7 +6,7 @@ public class ComponentAssembler {
             throw new IllegalArgumentException("Frame object cannot be null.");
         }
         if (gamePanel == null) {
-            throw new IllegalArgumentException("GrassFieldPanel object cannot be null.");
+            throw new IllegalArgumentException("GamePanel object cannot be null.");
         }
         if (!(gamePanel instanceof JPanel)) {
             throw new IllegalArgumentException("GamePanel object must be an instance of JPanel.");

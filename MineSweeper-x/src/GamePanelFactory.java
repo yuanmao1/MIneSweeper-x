@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanelFactory {
+    //test code
     public static void main(String[] args) {
          JFrame frame = new JFrame();
          switchToGrassField(frame, 10, 10);
@@ -18,13 +19,13 @@ class config {
 }
 
 class GrassFieldPanel extends JPanel implements IGamePanel {
-    private Cell cellArray[][] = null;
+    private GrassCell grassCellArray[][] = null;
 
     public GrassFieldPanel(int rows, int cols) {
-        cellArray = new Cell[rows][cols];
+        grassCellArray = new GrassCell[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                cellArray[i][j] = new Cell(0);
+                grassCellArray[i][j] = new GrassCell(0);
             }
         }
 
@@ -34,9 +35,9 @@ class GrassFieldPanel extends JPanel implements IGamePanel {
     public void paint(Graphics g) {
         super.paint(g);
         try {
-            for (int i = 0; i < cellArray.length; i++) {
-                for (int j = 0; j < cellArray[i].length; j++) {
-                    cellArray[i][j].paintSelf(g, i * config.cellSize, j * config.cellSize, config.cellSize, config.cellSize);
+            for (int i = 0; i < grassCellArray.length; i++) {
+                for (int j = 0; j < grassCellArray[i].length; j++) {
+                    grassCellArray[i][j].paintSelf(g, i * config.cellSize, j * config.cellSize, config.cellSize, config.cellSize);
                 }
             }
         } catch (NullPointerException e) {
@@ -49,7 +50,7 @@ class GrassFieldPanel extends JPanel implements IGamePanel {
     }
 }
 
-class Cell {
+class GrassCell {
     private int mineLevel = -1;
     public int getMineLevel() {
         return mineLevel;
@@ -80,7 +81,7 @@ class Cell {
 
     private ImageIcon imageIcon = ImageHolder.blank;
 
-    public Cell(final int mineLevel) {
+    public GrassCell(final int mineLevel) {
         this.setMineLevel(mineLevel);
     }
 

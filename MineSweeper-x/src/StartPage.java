@@ -5,6 +5,7 @@ public class StartPage {
     StartPage(JFrame frame) {
         frame.getContentPane().removeAll();
         JPanel panel = new JPanel();
+        panel.setOpaque(false);
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -14,7 +15,7 @@ public class StartPage {
         // 创建按钮
         JButton beginButton = new JButton("Begin");
         beginButton.addActionListener(e -> {
-            new Game(frame);
+            new GameSelectPage(frame);
         });
         JButton settingsButton = new JButton("Settings");
         settingsButton.addActionListener(e -> {
