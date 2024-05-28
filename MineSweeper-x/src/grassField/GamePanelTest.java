@@ -1,5 +1,4 @@
 package grassField;
-
 import javax.swing.*;
 
 public class GamePanelTest {
@@ -17,4 +16,3 @@ public class GamePanelTest {
         ComponentAssembler.assemble(frame, grassFieldPanel);
     }
 }
-

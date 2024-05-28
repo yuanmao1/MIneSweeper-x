@@ -17,7 +17,6 @@ public class ComponentAssembler {
 
         frame.getContentPane().removeAll();
         frame.setTitle(gamePanel.getTitle());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
         frame.setContentPane((JPanel) gamePanel);
         frame.pack();

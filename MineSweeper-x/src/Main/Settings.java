@@ -1,5 +1,6 @@
+package Main;
+
 import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 public class Settings {
@@ -127,7 +128,7 @@ public class Settings {
         frame.repaint();
     }
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Settings");
+        JFrame frame = new JFrame("Main.Settings");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
         new Settings(frame);

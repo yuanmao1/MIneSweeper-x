@@ -6,7 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.Queue;
-
+import Main.*;
 public class GrassFieldPanel extends JPanel implements IGamePanel {
 
     //all info
@@ -97,6 +97,7 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
 
     // constructor
     public GrassFieldPanel(final int rowTotal, final int colTotal, final Difficulty diffRate) {
+        setOpaque(false);
         if (rowTotal * colTotal < 16) {
             throw new IllegalArgumentException("The total number of cells cannot be less than 16.");
         }
@@ -329,6 +330,22 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
     private static final int NOT_WINNER = 2;
     private int winnerState = NONE_STATE;
     public void gameOver() {
+        JDialog dialog = new JDialog();
+        dialog.setSize(300, 100);
+        dialog.setLocationRelativeTo(null);
+        dialog.setLayout(new FlowLayout());
+        JLabel label = new JLabel("Game over!");
+        JButton okButton = new JButton("OK");
+        dialog.add(label);
+        dialog.add(okButton);
+        okButton.addActionListener(e -> {
+            dialog.dispose();
+            Main.frame.setVisible(true);
+            Main.frame.toFront();
+            Main.frame.requestFocus();
+        });
+        dialog.setVisible(true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         //need do something
         System.out.print("Game over!" );
         if (winnerState == IS_WINNER) {

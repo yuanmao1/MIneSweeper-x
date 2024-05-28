@@ -1,6 +1,8 @@
+package Main;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+
 public class StartPage {
     StartPage(JFrame frame) {
         frame.getContentPane().removeAll();
