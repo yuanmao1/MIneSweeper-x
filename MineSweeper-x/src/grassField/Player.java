@@ -4,6 +4,36 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Player {
+
+    //level
+    private int levelUpNeeded = 1;
+    public int getLevelUpNeeded() {
+        return levelUpNeeded;
+    }
+    public void setLevelUpNeeded(final int levelUpNeeded) {
+        this.levelUpNeeded = levelUpNeeded;
+    }
+
+    // level
+    private int currXP = 0;
+    private int level = 1;
+    public int getLevel() {
+        return level;
+    }
+    private void upLevel() {
+        if (level <= 7) level++;
+    }
+    public void updateWhenClearedOneMine(final int mineLevelCleared) {
+        if (mineLevelCleared > level) {
+            return;
+        } //
+        currXP++;
+        if (currXP >= levelUpNeeded) {
+            currXP = 0;
+            upLevel();
+        }
+    }
+
     // in which gamePanel
     private GrassFieldPanel gamePanel = null;
     private GrassFieldPanel getGamePanel() {
@@ -119,6 +149,5 @@ public class Player {
         }
         imageIcon = ImageHolder.leftMan;
     }
-
 
 }

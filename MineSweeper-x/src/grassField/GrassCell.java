@@ -4,6 +4,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GrassCell {
+    //isFlag
+    private boolean isFlag = false;
+    public boolean isFlag() {
+        return isFlag;
+    }
+    public void setIsFlag(final boolean isFlag) {
+        this.isFlag = isFlag;
+    }
+
     //row and col
     private int row = 1;
     public int getRow() {
@@ -87,16 +96,18 @@ public class GrassCell {
 
             String text = "";
             if (numberMark > 0) {
+                g.setColor(Color.BLUE);
                 text = "<" + numberMark + ">";
             }
             if (mineLevel > 0) { //is mine
+                g.setColor(Color.RED);
                 text = "M" + mineLevel;
             }
 
-            //test
-            //text = text + " " + row + " " + col;
+            if (isFlag) {
+                g.setColor(Color.CYAN);
+            }
 
-            g.setColor(Color.BLUE);
             g.setFont(new Font("Arial", Font.PLAIN, 12));
             g.drawString(text, x + width / 2 - g.getFontMetrics().stringWidth(text) / 2,
                     y + height / 2 + g.getFontMetrics().getAscent() / 2);

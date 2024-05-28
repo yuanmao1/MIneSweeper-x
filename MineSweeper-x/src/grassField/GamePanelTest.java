@@ -7,7 +7,7 @@ public class GamePanelTest {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
 
-        switchToGrassField(frame, 10, 15);
+        switchToGrassField(frame, 12, 18);
 
         frame.setBounds(100, 100, frame.getPreferredSize().width, frame.getPreferredSize().height);
     }

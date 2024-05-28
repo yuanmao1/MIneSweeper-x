@@ -5,7 +5,7 @@ import java.awt.event.*;
 public class Settings {
     static int backGroundColor = 8;
     static public Color getBackGroundColor() {
-        return switch (backGroundColor) {
+        /*return switch (backGroundColor) {
             case 0 -> Color.RED;
             case 1 -> Color.GREEN;
             case 2 -> Color.BLUE;
@@ -15,7 +15,38 @@ public class Settings {
             case 6 -> Color.GRAY;
             case 7 -> Color.BLACK;
             default -> Color.WHITE;
-        };
+        };*/
+        Color result;
+        switch (backGroundColor) {
+            case 0:
+                result = Color.RED;
+                break;
+            case 1:
+                result = Color.GREEN;
+                break;
+            case 2:
+                result = Color.BLUE;
+                break;
+            case 3:
+                result = Color.YELLOW;
+                break;
+            case 4:
+                result = Color.CYAN;
+                break;
+            case 5:
+                result = Color.MAGENTA;
+                break;
+            case 6:
+                result = Color.GRAY;
+                break;
+            case 7:
+                result = Color.BLACK;
+                break;
+            default:
+                result = Color.WHITE;
+                break;
+        }
+        return result;
     }
     Settings(JFrame frame){
         frame.getContentPane().removeAll();
