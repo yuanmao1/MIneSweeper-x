@@ -7,8 +7,6 @@ import java.util.Random;
 import java.util.random.*;
 import grassField.*;
 
-
-
 abstract class Game{
     JFrame frame;
     JPanel gamePanel = new JPanel();
@@ -114,19 +112,29 @@ class OrdinaryModeGame extends Game{
     int mineNum = 40;
     int flagNum = 0;
 
-    JButton[][] buttons = new JButton[20][20];
+    JButton[][] buttons = new JButton[20][20]; // 按钮数组
+    JLabel allMineLabel = new JLabel("总雷数：" + mineNum); // 总雷数标签
+    JLabel mineLabel = new JLabel("剩余雷数：" + 0); // 剩余雷数标签
     void gameInit(){
         frame.getContentPane().removeAll();
         frame.revalidate();
         frame.repaint();
         gamePanel.removeAll();
+        mineLabel.setText("剩余雷数：" + 0);
+        flagNum = 0;
+        allMineLabel.setForeground(new Color(255 - Settings.getBackGroundColor().getRed(), 255 - Settings.getBackGroundColor().getGreen(), 255 - Settings.getBackGroundColor().getBlue()));
+        mineLabel.setForeground(new Color(255 - Settings.getBackGroundColor().getRed(), 255 - Settings.getBackGroundColor().getGreen(), 255 - Settings.getBackGroundColor().getBlue()));
+        allMineLabel.setBounds(20, 10, 100, 20);
+        mineLabel.setBounds(130, 10, 100, 20);
+        gamePanel.add(allMineLabel);
+        gamePanel.add(mineLabel);
         frame.getContentPane().setLayout(new CardLayout());
         coverIcon = resizeIcon(coverIcon, 20, 20);
         for(int i = 0; i < 20; i++){
             for(int j = 0; j < 20; j++){
                 hmap[i][j] = false;
                 buttons[i][j] = new JButton(coverIcon);
-                buttons[i][j].setBounds(50 + 20 * i, 30 + 20 * j, 20, 20);
+                buttons[i][j].setBounds(40 + 20 * i, 30 + 20 * j, 20, 20);
                 int finalI = i;
                 int finalJ = j;
                 buttons[i][j].addActionListener(e -> {
@@ -150,6 +158,7 @@ class OrdinaryModeGame extends Game{
                                     Icon icon = resizeIcon(flagIcon, 20, 20);
                                     buttons[finalI][finalJ].setIcon(icon);
                                     flagNum++;
+                                    mineLabel.setText("剩余雷数：" + (mineNum - flagNum));
                                     if (flagNum == mineNum) {
                                         JDialog win = new JDialog(frame, "You Win", true);
                                         win.setLayout(new GridBagLayout());

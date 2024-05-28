@@ -8,6 +8,10 @@ import java.util.LinkedList;
 import java.util.Queue;
 import Main.*;
 public class GrassFieldPanel extends JPanel implements IGamePanel {
+    JFrame frame;
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
 
     //all info
     //minesUnclear List
@@ -340,6 +344,7 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
         dialog.add(okButton);
         okButton.addActionListener(e -> {
             dialog.dispose();
+            frame.dispose();
             Main.frame.setVisible(true);
             Main.frame.toFront();
             Main.frame.requestFocus();

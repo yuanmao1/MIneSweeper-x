@@ -13,6 +13,7 @@ public class GamePanelTest {
 
     public static void switchToGrassField(JFrame frame, int rows, int cols) {
         GrassFieldPanel grassFieldPanel = new GrassFieldPanel(rows, cols, Difficulty.getEasy());
+        grassFieldPanel.setFrame(frame);
         ComponentAssembler.assemble(frame, grassFieldPanel);
     }
 }
