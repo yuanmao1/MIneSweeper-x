@@ -349,6 +349,11 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
             Main.frame.toFront();
             Main.frame.requestFocus();
         });
+        if (winnerState == IS_WINNER) {
+            label.setText("Game over! You win!");
+        } else {
+            label.setText("Game over! You lose!");
+        }
         dialog.setVisible(true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         //need do something

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.Random;
-import java.util.random.*;
+import java.util.Random.*;
 import grassField.*;
 
 abstract class Game{
@@ -109,7 +109,7 @@ class OrdinaryModeGame extends Game{
     }
     boolean[][] isMine = new boolean[20][20];
     boolean isGameStart = false;
-    int mineNum = 40;
+    int mineNum = 1;
     int flagNum = 0;
 
     JButton[][] buttons = new JButton[20][20]; // 按钮数组
@@ -182,6 +182,7 @@ class OrdinaryModeGame extends Game{
                                         win.add(restartButton, gbc);
                                         win.add(label);
                                         win.add(restartButton);
+                                        win.setVisible(true);
                                     }
                                 }
                                 else gameOver();
