@@ -3,7 +3,20 @@ import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
 public class Settings {
-    static int backGroundColor = 0;
+    static int backGroundColor = 8;
+    static public Color getBackGroundColor() {
+        return switch (backGroundColor) {
+            case 0 -> Color.RED;
+            case 1 -> Color.GREEN;
+            case 2 -> Color.BLUE;
+            case 3 -> Color.YELLOW;
+            case 4 -> Color.CYAN;
+            case 5 -> Color.MAGENTA;
+            case 6 -> Color.GRAY;
+            case 7 -> Color.BLACK;
+            default -> Color.WHITE;
+        };
+    }
     Settings(JFrame frame){
         frame.getContentPane().removeAll();
         frame.repaint();
@@ -14,7 +27,6 @@ public class Settings {
         panel.getActionMap().put("Close", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Closing Settings");
                 new StartPage(frame);
             }
         });
@@ -31,30 +43,39 @@ public class Settings {
                 switch (selectedColor) {
                     case "Red":
                         frame.getContentPane().setBackground(Color.RED);
+                        backGroundColor = 0;
                         break;
                     case "Green":
                         frame.getContentPane().setBackground(Color.GREEN);
+                        backGroundColor = 1;
                         break;
                     case "Blue":
                         frame.getContentPane().setBackground(Color.BLUE);
+                        backGroundColor = 2;
                         break;
                     case "Yellow":
                         frame.getContentPane().setBackground(Color.YELLOW);
+                        backGroundColor = 3;
                         break;
                     case "Cyan":
                         frame.getContentPane().setBackground(Color.CYAN);
+                        backGroundColor = 4;
                         break;
                     case "Magenta":
                         frame.getContentPane().setBackground(Color.MAGENTA);
+                        backGroundColor = 5;
                         break;
                     case "Gray":
                         frame.getContentPane().setBackground(Color.GRAY);
+                        backGroundColor = 6;
                         break;
                     case "Black":
                         frame.getContentPane().setBackground(Color.BLACK);
+                        backGroundColor = 7;
                         break;
                     case "White":
                         frame.getContentPane().setBackground(Color.WHITE);
+                        backGroundColor = 8;
                         break;
                 }
             }
