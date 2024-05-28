@@ -1,3 +1,4 @@
+package grassField;
 
 /*
  * @ must be a JPanel

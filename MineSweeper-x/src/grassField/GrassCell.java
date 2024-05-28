@@ -1,7 +1,25 @@
+package grassField;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GrassCell {
+    //row and col
+    private int row = 1;
+    public int getRow() {
+        return row;
+    }
+    public void setRow(final int row) {
+        this.row = row;
+    }
+    private int col = 1;
+    public int getCol() {
+        return col;
+    }
+    public void setCol(final int col) {
+        this.col = col;
+    }
+
     // is searched
     private boolean isSearched = false;
     public boolean isSearched() {
@@ -40,15 +58,13 @@ public class GrassCell {
     }
 
     //is covered or not
-    private boolean isCovered = false;
+    private boolean isCovered = true;
     public boolean isCovered() {
         return isCovered;
     }
     public void setCovered(final boolean isCovered) {
         this.isCovered = isCovered;
     }
-
-    private ImageIcon imageIcon = ImageHolder.blank;
 
     public GrassCell() {
         //nothing to do
@@ -60,6 +76,7 @@ public class GrassCell {
         }
 
         do {
+            ImageIcon imageIcon = ImageHolder.blank;
             if (isCovered) {
                 imageIcon = ImageHolder.cover;
                 g.drawImage(imageIcon.getImage(), x, y, null);
@@ -68,7 +85,7 @@ public class GrassCell {
 
             g.drawImage(imageIcon.getImage(), x, y, null);
 
-            String text = ".";
+            String text = "";
             if (numberMark > 0) {
                 text = "<" + numberMark + ">";
             }
@@ -76,12 +93,15 @@ public class GrassCell {
                 text = "M" + mineLevel;
             }
 
+            //test
+            //text = text + " " + row + " " + col;
+
             g.setColor(Color.BLUE);
             g.setFont(new Font("Arial", Font.PLAIN, 12));
             g.drawString(text, x + width / 2 - g.getFontMetrics().stringWidth(text) / 2,
                     y + height / 2 + g.getFontMetrics().getAscent() / 2);
         } while (false);
 
-        System.out.println("paintSelf: at " + x + ", " + y + " with size " + width + "x" + height);
+        //System.out.println("paintSelf: at " + x + ", " + y + " with size " + width + "x" + height);
     }
 }

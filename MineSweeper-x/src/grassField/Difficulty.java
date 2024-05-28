@@ -1,3 +1,5 @@
+package grassField;
+
 class Difficulty {
     private double mineProbability = 0;
 

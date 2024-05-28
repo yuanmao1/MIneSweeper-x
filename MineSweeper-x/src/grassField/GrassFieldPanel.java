@@ -1,7 +1,11 @@
+package grassField;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class GrassFieldPanel extends JPanel implements IGamePanel {
     // cell size when painting
@@ -23,6 +27,8 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
         for (int i = 0; i < rowTotal; i++) {
             for (int j = 0; j < colTotal; j++) {
                 cellArray[i][j] = new GrassCell();
+                cellArray[i][j].setRow(i);
+                cellArray[i][j].setCol(j);
             }
         }
 
@@ -54,7 +60,7 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
 
     // constructor
     public GrassFieldPanel(final int rowTotal, final int colTotal, final Difficulty diffRate) {
-        this.setPreferredSize(new Dimension(cellSize * colTotal, cellSize * rowTotal));
+        this.setPreferredSize(new Dimension(cellSize * colTotal + 300, cellSize * rowTotal + 300));
 
         setRowTotal(rowTotal);
         setColTotal(colTotal);
@@ -89,7 +95,16 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
                     }
                 }
 
+                /*Thread thread = new Thread(() -> {
+                    revealAt(player.getRow(), player.getCol());
+                    repaint();
+                });
+                thread.start();*/
+                if (player != null) {
+                    revealAt(player.getRow(), player.getCol());
+                }
                 repaint();
+
             }
         });
         this.setFocusable(true);
@@ -98,10 +113,48 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
 
     //reveal at (r,c)
     private void revealAt(int rowA, int colA) {
+        System.out.println("rowA" + rowA + "colA" + colA);
         //queue
+        Queue<GrassCell> queue = new LinkedList<>();
+        queue.add(cellArray[rowA][colA]);
 
+        for (int row = 0; row < rowTotal; row++) {
+            for (int col = 0; col < colTotal; col++) {
+                cellArray[row][col].setSearched(false);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            GrassCell current = queue.poll();
+
+            current.setCovered(false);
+
+            if (isCellAWall(current)) {
+                continue;
+            }
+
+            int row = current.getRow();
+            int col = current.getCol();
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    if (row + i >= 0 && row + i < rowTotal
+                            && col + j >= 0 && col + j < colTotal
+                            && !(i == 0 && j == 0)
+                            && current.isSearched() == false
+                    ) {
+                        queue.add(cellArray[row + i][col + j]);
+                    }
+                }
+            }
+
+            current.setSearched(true);
+        }
+
+    } // end
+
+    private boolean isCellAWall(final GrassCell cell) {
+        return cell.getMineLevel() > 0 || cell.getNumberMark() > 0;
     }
-
 
     // paint the cells and then the player
     public void paint(Graphics g) {
@@ -109,12 +162,12 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
         try {
             for (int i = 0; i < cellArray.length; i++) {
                 for (int j = 0; j < cellArray[i].length; j++) {
-                    cellArray[i][j].paintSelf(g, i * cellSize, j * cellSize, cellSize, cellSize);
+                    cellArray[i][j].paintSelf(g, j * cellSize + 150, i * cellSize + 150, cellSize, cellSize);
                 }
             }
 
             if (player != null) {
-                player.paintSelf(g, player.getCol() * cellSize, player.getRow() * cellSize);
+                player.paintSelf(g, player.getCol() * cellSize + 150, player.getRow() * cellSize + 150);
             }
         } catch (NullPointerException e) {
             // ignore
@@ -167,7 +220,9 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
 
                 for (int i = -1; i <= 1; i++) {
                     for (int j = -1; j <= 1; j++) {
-                        if (row + i >= 0 && row + i < rowTotal && col + j >= 0 && col + j < colTotal) {
+                        if (row + i >= 0 && row + i < rowTotal
+                                && col + j >= 0 && col + j < colTotal
+                                && !(i == 0 && j == 0)) {
                             if (cellArray[row + i][col + j].getMineLevel() >= 1) {
                                 count += cellArray[row + i][col + j].getMineLevel();
                             }

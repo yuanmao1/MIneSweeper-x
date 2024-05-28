@@ -1,3 +1,5 @@
+package grassField;
+
 import javax.swing.ImageIcon;
 
 public class ImageHolder {

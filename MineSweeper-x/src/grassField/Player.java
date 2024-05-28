@@ -1,3 +1,5 @@
+package grassField;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -47,7 +49,7 @@ public class Player {
             throw new IllegalStateException("Game panel must be set before row can be set.");
         }
         if (row < 0 || row >= gamePanel.getRowTotal()) {
-            throw new IllegalArgumentException("Player must be on a valid row.");
+            throw new IllegalArgumentException("grassField.Player must be on a valid row.");
         }
         this.row = row;
     }
@@ -61,7 +63,7 @@ public class Player {
             throw new IllegalStateException("Game panel must be set before column can be set.");
         }
         if (col < 0 || col >= gamePanel.getColTotal()) {
-            throw new IllegalArgumentException("Player must be on a valid column.");
+            throw new IllegalArgumentException("grassField.Player must be on a valid column.");
         }
         this.col = col;
     }
@@ -80,7 +82,7 @@ public class Player {
 
         g.drawImage(imageIcon.getImage(), x, y, null);
 
-        System.out.println("paintSelf: " + " at " + x + ", " + y);
+        System.out.println("paint player" + " at " + x + ", " + y + "with row and col:" + row + ", " + col);
     }
 
     //image icon, will change when moving
@@ -100,7 +102,7 @@ public class Player {
         if (row > 0) {
             row--;
         }
-        imageIcon = ImageHolder.frontMan;
+        imageIcon = ImageHolder.backMan;
     }
     public void rightMove() {
         if (gamePanel == null) {
@@ -109,13 +111,13 @@ public class Player {
         if (col < gamePanel.getColTotal() - 1) {
             col++;
         }
-        imageIcon = ImageHolder.frontMan;
+        imageIcon = ImageHolder.rightMan;
     }
     public void leftMove() {
         if (col > 0) {
             col--;
         }
-        imageIcon = ImageHolder.frontMan;
+        imageIcon = ImageHolder.leftMan;
     }
 
 
