@@ -10,25 +10,28 @@ public class GameSelectPage {
         panel.getActionMap().put("Close", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Closing Settings");
                 new StartPage(frame);
             }
         });
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(20, 10, 20, 10);
-        JButton eazyButton = new JButton("简单模式");
-        JButton mediumButton = new JButton("普通模式");
-        JButton diffcultButton = new JButton("困难模式");
-        eazyButton.setPreferredSize(new Dimension(200, 75));
+        JButton ordinaryButton = new JButton("普通模式");
+        JButton mediumButton = new JButton("XX模式");
+        JButton diffcultButton = new JButton("XX模式");
+        ordinaryButton.setPreferredSize(new Dimension(200, 75));
         mediumButton.setPreferredSize(new Dimension(200, 75));
         diffcultButton.setPreferredSize(new Dimension(200, 75));
-        eazyButton.addActionListener(e -> {});
+        ordinaryButton.addActionListener(e -> {
+            Game game = GameFactory.creatGame("普通模式");
+            game.gameInit();
+            //new GameFactory();
+            frame.setVisible(false);});
         mediumButton.addActionListener(e -> {});
         diffcultButton.addActionListener(e -> {});
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(eazyButton, gbc);
+        panel.add(ordinaryButton, gbc);
         gbc.gridy = 1;
         panel.add(mediumButton, gbc);
         gbc.gridy = 2;
