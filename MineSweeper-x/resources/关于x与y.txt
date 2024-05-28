@@ -1,0 +1,11 @@
+player
+row 所在行，方向为下， 对应y
+col 所在列，方向为右, 对应x
+
+cellArray
+左index row 下 y
+右index col 右 x
+
+cell
+row 所在行，方向为下， 对应y
+col 所在列，方向为右, 对应x
