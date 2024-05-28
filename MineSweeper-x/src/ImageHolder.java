@@ -6,4 +6,5 @@ public class ImageHolder {
     public static final ImageIcon backMan = new ImageIcon("resources/images/backMan.png");
     public static final ImageIcon leftMan = new ImageIcon("resources/images/leftMan.png");
     public static final ImageIcon rightMan = new ImageIcon("resources/images/rightMan.png");
+    public static final ImageIcon cover = new ImageIcon("resources/images/cover.png");
 }
