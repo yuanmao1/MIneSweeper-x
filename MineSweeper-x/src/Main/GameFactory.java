@@ -65,7 +65,7 @@ abstract class Game{
         panel.setLayout(new GridBagLayout());
         panel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(20, 10, 20, 10);
+        gbc.insets = new Insets(15, 10, 15, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         JButton resumeButton = new JButton("Resume");
         resumeButton.addActionListener(e -> toggleMenu());
@@ -78,8 +78,10 @@ abstract class Game{
         });
         gbc.gridx = 0;
         gbc.gridy = 0;
+        resumeButton.setPreferredSize(new Dimension(100, 50));
         panel.add(resumeButton, gbc);
-        gbc.gridy = 1;
+        gbc.gridy = 10;
+        exitButton.setPreferredSize(new Dimension(100, 50));
         panel.add(exitButton, gbc);
         return panel;
     }
@@ -100,19 +102,91 @@ class GrassField extends Game{
     }
 }
 class OrdinaryModeGame extends Game{
+    int row = 16, col = 16;
+    int rate = 10;
     OrdinaryModeGame(){
         super();
         frame.setTitle("普通模式");
         frame.setSize(500, 500);
         gamePanel.setLayout(null);
+        JButton difficultyButton = new JButton("Difficulty");
+        difficultyButton.setPreferredSize(new Dimension(100, 50));
+        difficultyButton.addActionListener(e -> {
+            JDialog dialog = new JDialog(frame, "Difficulty", true);
+            dialog.setLayout(new GridBagLayout());
+            dialog.setSize(300, 175);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            dialog.setLocationRelativeTo(null);
+            JLabel label = new JLabel("Select Difficulty:");
+            JRadioButton easyButton = new JRadioButton("Easy");
+            JRadioButton mediumButton = new JRadioButton("Medium");
+            JRadioButton hardButton = new JRadioButton("Hard");
+            ButtonGroup group = new ButtonGroup();
+            group.add(easyButton);
+            group.add(mediumButton);
+            group.add(hardButton);
+            mediumButton.setSelected(true);
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(20, 10, 20, 10);
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            dialog.add(label, gbc);
+            gbc.gridy = 1;
+            dialog.add(easyButton, gbc);
+            gbc.gridx = 1;
+            dialog.add(mediumButton, gbc);
+            gbc.gridx = 2;
+            dialog.add(hardButton, gbc);
+            dialog.add(label);
+            dialog.add(easyButton);
+            dialog.add(mediumButton);
+            dialog.add(hardButton);
+            difficultyButton.setEnabled(false);
+            JButton yesButton = new JButton("YES");
+            yesButton.addActionListener(e1 -> {
+                if (easyButton.isSelected()) {
+                    row = 10;
+                    col = 10;
+                    rate = 12;
+                } else if (mediumButton.isSelected()) {
+                    row = 16;
+                    col = 16;
+                    rate = 10;
+                } else if (hardButton.isSelected()) {
+                    row = 20;
+                    col = 20;
+                    rate = 8;
+                }
+                difficultyButton.setEnabled(true);
+                gameInit();
+                dialog.dispose();
+            });
+            gbc.gridy = 2;
+            gbc.gridx = 3;
+            dialog.add(yesButton, gbc);
+            dialog.addWindowListener(new WindowAdapter(){
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    difficultyButton.setEnabled(true);
+                }
+            });
+            dialog.setVisible(true);
+        });
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 10, 15, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        menuPanel.add(difficultyButton, gbc);
         gameInit();
     }
-    boolean[][] isMine = new boolean[20][20];
+    boolean[][] isMine;
     boolean isGameStart = false;
-    int mineNum = 1;
-    int flagNum = 0;
+    int mineNum;
+    int flagNum;
 
-    JButton[][] buttons = new JButton[20][20]; // 按钮数组
+    JButton[][] buttons; // 按钮数组
     JLabel allMineLabel = new JLabel("总雷数：" + mineNum); // 总雷数标签
     JLabel mineLabel = new JLabel("剩余雷数：" + 0); // 剩余雷数标签
     void gameInit(){
@@ -120,8 +194,8 @@ class OrdinaryModeGame extends Game{
         frame.revalidate();
         frame.repaint();
         gamePanel.removeAll();
+        initialize();
         mineLabel.setText("剩余雷数：" + 0);
-        flagNum = 0;
         allMineLabel.setForeground(new Color(255 - Settings.getBackGroundColor().getRed(), 255 - Settings.getBackGroundColor().getGreen(), 255 - Settings.getBackGroundColor().getBlue()));
         mineLabel.setForeground(new Color(255 - Settings.getBackGroundColor().getRed(), 255 - Settings.getBackGroundColor().getGreen(), 255 - Settings.getBackGroundColor().getBlue()));
         allMineLabel.setBounds(20, 10, 100, 20);
@@ -129,12 +203,13 @@ class OrdinaryModeGame extends Game{
         gamePanel.add(allMineLabel);
         gamePanel.add(mineLabel);
         frame.getContentPane().setLayout(new CardLayout());
-        coverIcon = resizeIcon(coverIcon, 20, 20);
-        for(int i = 0; i < 20; i++){
-            for(int j = 0; j < 20; j++){
+        int width = 400 / col, height = 400 / row;
+        coverIcon = resizeIcon(coverIcon, width, height);
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
                 hmap[i][j] = false;
                 buttons[i][j] = new JButton(coverIcon);
-                buttons[i][j].setBounds(40 + 20 * i, 30 + 20 * j, 20, 20);
+                buttons[i][j].setBounds(40 + height * i, 30 + width * j, width, height);
                 int finalI = i;
                 int finalJ = j;
                 buttons[i][j].addActionListener(e -> {
@@ -155,7 +230,7 @@ class OrdinaryModeGame extends Game{
                         if (SwingUtilities.isRightMouseButton(e)) {
                             if (buttons[finalI][finalJ].getIcon() == coverIcon) {
                                 if (isMine[finalI][finalJ]) {
-                                    Icon icon = resizeIcon(flagIcon, 20, 20);
+                                    Icon icon = resizeIcon(flagIcon, width, height);
                                     buttons[finalI][finalJ].setIcon(icon);
                                     flagNum++;
                                     mineLabel.setText("剩余雷数：" + (mineNum - flagNum));
@@ -174,10 +249,9 @@ class OrdinaryModeGame extends Game{
                                         GridBagConstraints gbc = new GridBagConstraints();
                                         gbc.insets = new Insets(20, 10, 20, 10);
                                         gbc.fill = GridBagConstraints.HORIZONTAL;
-                                        gbc.gridx = 1;
+                                        gbc.gridx = 0;
                                         gbc.gridy = 0;
                                         win.add(label, gbc);
-                                        gbc.gridx = 0;
                                         gbc.gridy = 1;
                                         win.add(restartButton, gbc);
                                         win.add(label);
@@ -200,12 +274,21 @@ class OrdinaryModeGame extends Game{
         frame.revalidate();
         frame.repaint();
     }
+    void initialize(){
+        isMine = new boolean[row][col];
+        buttons = new JButton[row][col];
+        hmap = new boolean[row][col];
+        mineNum = row * col / rate;
+        flagNum = 0;
+        isGameStart = false;
+        allMineLabel.setText("总雷数： " + mineNum );
+    }
     void placingMines(int x, int y){
         Random rand = new Random();
         int count = 0;
         while (count < mineNum) {
-            int i = rand.nextInt(20);
-            int j = rand.nextInt(20);
+            int i = rand.nextInt(row);
+            int j = rand.nextInt(col);
             if ((i != x || j != y) && !isMine[i][j]) {
                 isMine[i][j] = true;
                 count++;
@@ -246,7 +329,7 @@ class OrdinaryModeGame extends Game{
         gameOver.add(exitButton);
         gameOver.setVisible(true);
     }
-    boolean hmap[][] = new boolean[20][20];
+    boolean hmap[][];
     void sweep(int x, int y){
         if(isMine[x][y]) {
             buttons[x][y].setIcon(mineIcon);
@@ -256,25 +339,25 @@ class OrdinaryModeGame extends Game{
         else{
             int count = 0;
             if(x > 0 && isMine[x-1][y]) count++;
-            if(x < 19 && isMine[x+1][y]) count++;
+            if(x < row - 1 && isMine[x+1][y]) count++;
             if(y > 0 && isMine[x][y-1]) count++;
-            if(y < 19 && isMine[x][y+1]) count++;
+            if(y < col - 1 && isMine[x][y+1]) count++;
             if(x > 0 && y > 0 && isMine[x-1][y-1]) count++;
-            if(x < 19 && y > 0 && isMine[x+1][y-1]) count++;
-            if(x > 0 && y < 19 && isMine[x-1][y+1]) count++;
-            if(x < 19 && y < 19 && isMine[x+1][y+1]) count++;
-            Icon icon = resizeIcon(images[count], 20, 20);
+            if(x < row - 1 && y > 0 && isMine[x+1][y-1]) count++;
+            if(x > 0 && y < col - 1 && isMine[x-1][y+1]) count++;
+            if(x < row - 1 && y < col - 1 && isMine[x+1][y+1]) count++;
+            Icon icon = resizeIcon(images[count], 400 / col, 400 / row);
             buttons[x][y].setIcon(icon);
             hmap[x][y] = true;
             if(count == 0){
                 if(x > 0 && !hmap[x-1][y]) sweep(x - 1, y);
-                if(x < 19 && !hmap[x+1][y]) sweep(x + 1, y);
+                if(x < row -1 && !hmap[x+1][y]) sweep(x + 1, y);
                 if(y > 0 && !hmap[x][y-1]) sweep(x, y - 1);
-                if(y < 19 && !hmap[x][y+1]) sweep(x, y + 1);
+                if(y < col - 1 && !hmap[x][y+1]) sweep(x, y + 1);
                 if(x > 0 && y > 0 && !hmap[x-1][y-1])  sweep(x - 1, y - 1);
-                if(x < 19 && y > 0 && !hmap[x+1][y-1]) sweep(x + 1, y - 1);
-                if(x > 0 && y < 19 && !hmap[x-1][y+1]) sweep(x - 1, y + 1);
-                if(x < 19 && y < 19 && !hmap[x+1][y+1]) sweep(x + 1, y + 1);
+                if(x < row - 1 && y > 0 && !hmap[x+1][y-1]) sweep(x + 1, y - 1);
+                if(x > 0 && y < col - 1 && !hmap[x-1][y+1]) sweep(x - 1, y + 1);
+                if(x < row - 1 && y < col - 1 && !hmap[x+1][y+1]) sweep(x + 1, y + 1);
             }
         }
         frame.revalidate();
