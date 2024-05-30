@@ -3,8 +3,10 @@ package Main;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.util.Random;
+import java.util.*;
 import java.util.Random.*;
+import java.util.Timer;
+
 import grassField.*;
 
 abstract class Game{
@@ -14,6 +16,7 @@ abstract class Game{
     //存储图片
     ImageIcon[] images = new ImageIcon[9];
     ImageIcon mineIcon = new ImageIcon("resources/images2/landmine.png");
+    ImageIcon explodedMineIcon = new ImageIcon("resources/images2/explodedLandmine.png");
     ImageIcon flagIcon = new ImageIcon("resources/images2/flag.png");
     ImageIcon coverIcon = new ImageIcon("resources/images2/cover.png");
     Game(){
@@ -332,8 +335,21 @@ class OrdinaryModeGame extends Game{
     boolean hmap[][];
     void sweep(int x, int y){
         if(isMine[x][y]) {
-            buttons[x][y].setIcon(mineIcon);
-            gameOver();
+            Icon icon = resizeIcon(mineIcon, 400 / col, 400 / row);
+            buttons[x][y].setIcon(icon);
+            frame.revalidate();
+            frame.repaint();
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Icon icon = resizeIcon(explodedMineIcon, 400 / col, 400 / row);
+                    buttons[x][y].setIcon(icon);
+                    frame.revalidate();
+                    frame.repaint();
+                    gameOver();
+                }
+            },1000);
             return;
         }
         else{
