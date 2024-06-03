@@ -67,7 +67,8 @@ public class GrassCell {
     }
 
     //is covered or not
-    private boolean isCovered = false;
+    private boolean isCovered = true
+            ;
     public boolean isCovered() {
         return isCovered;
     }

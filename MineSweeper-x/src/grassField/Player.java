@@ -4,14 +4,48 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Player {
+    //constructor
+    public Player(final GrassFieldPanel gamePanel, final CellMatrix cellMatrix, final int hp) {
+        if (gamePanel == null) {
+            throw new IllegalArgumentException("Game panel cannot be null.");
+        }
+        this.gamePanel = gamePanel;
+        if (cellMatrix == null) {
+            throw new IllegalArgumentException("Cell matrix cannot be null.");
+        }
+        this.cellMatrix = cellMatrix;
+        setHitPoints(hp);
+    }
+
+    private final CellMatrix cellMatrix;
+    //in which gamePanel
+    private final GrassFieldPanel gamePanel;
+
+    //hit points
+    private int hitPoints;
+    public int getHitPoints() {
+        return hitPoints;
+    }
+    public void setHitPoints(final int hitPoints) {
+        if (hitPoints < 0) {
+            throw new IllegalArgumentException("Hit points cannot be negative.");
+        }
+        this.hitPoints = hitPoints;
+    }
+    public void decreaseHitPoints() {
+        hitPoints = (hitPoints > 0) ? (hitPoints - 1) : 0;
+        if (hitPoints == 0 && gamePanel!= null) {
+            gamePanel.gameOver();
+        }
+    }
 
     //level
-    private int levelUpNeeded = 1;
-    public int getLevelUpNeeded() {
-        return levelUpNeeded;
+    private int maxXP = 1;
+    public int getMaxXP() {
+        return maxXP;
     }
-    public void setLevelUpNeeded(final int levelUpNeeded) {
-        this.levelUpNeeded = levelUpNeeded;
+    public void setMaxXP(final int maxXP) {
+        this.maxXP = maxXP;
     }
 
     // level
@@ -28,45 +62,16 @@ public class Player {
             return;
         } //
         currXP++;
-        if (currXP >= levelUpNeeded) {
+        if (currXP >= maxXP) {
             currXP = 0;
             upLevel();
         }
     }
 
-    // in which gamePanel
-    private GrassFieldPanel gamePanel = null;
-    private GrassFieldPanel getGamePanel() {
-        return gamePanel;
-    }
-    private void setGamePanel(final GrassFieldPanel gamePanel) {
-        this.gamePanel = gamePanel;
-    }
 
-    //hit points
-    public static final int NOT_A_HP = -1001;
-    private int hitPoints = NOT_A_HP;
-    public int getHitPoints() {
-        return hitPoints;
-    }
-    public void setHitPoints(final int hitPoints) {
-        if (hitPoints < 0) {
-            throw new IllegalArgumentException("Hit points cannot be negative.");
-        }
-        this.hitPoints = hitPoints;
-    }
 
-    public void decreaseHitPoints() {
-        if (hitPoints == NOT_A_HP) {
-            throw new IllegalStateException("Hit points must be set before decreasing.");
-        }
-        if (hitPoints > 0) {
-            hitPoints--;
-        }
-        if (hitPoints == 0 && gamePanel!= null) {
-            gamePanel.gameOver();
-        }
-    }
+
+
 
     //position on the board (row and column)
     public static final int NOT_A_ROW = -1002;
@@ -78,7 +83,7 @@ public class Player {
         if (gamePanel == null) {
             throw new IllegalStateException("Game panel must be set before row can be set.");
         }
-        if (row < 0 || row >= gamePanel.getRowTotal()) {
+        if (row < 0 || row >= cellMatrix.getRowTotal()) {
             throw new IllegalArgumentException("grassField.Player must be on a valid row.");
         }
         this.row = row;
@@ -92,17 +97,13 @@ public class Player {
         if (gamePanel == null) {
             throw new IllegalStateException("Game panel must be set before column can be set.");
         }
-        if (col < 0 || col >= gamePanel.getColTotal()) {
+        if (col < 0 || col >= cellMatrix.getColTotal()) {
             throw new IllegalArgumentException("grassField.Player must be on a valid column.");
         }
         this.col = col;
     }
 
-    //constructor
-    public Player(final GrassFieldPanel gamePanel, final int hp) {
-        setGamePanel(gamePanel);
-        setHitPoints(hp);
-    }
+
 
     //paint self
     public void paintSelf(Graphics g, int x, int y) {
@@ -123,7 +124,7 @@ public class Player {
         if (gamePanel == null) {
             throw new IllegalStateException("Game panel must be set before row can be set.");
         }
-        if (row < gamePanel.getRowTotal() -1) {
+        if (row < cellMatrix.getRowTotal() -1) {
             row++;
         }
         imageIcon = ImageHolder.frontMan;
@@ -138,7 +139,7 @@ public class Player {
         if (gamePanel == null) {
             throw new IllegalStateException("Game panel must be set before column can be set.");
         }
-        if (col < gamePanel.getColTotal() - 1) {
+        if (col < cellMatrix.getColTotal() - 1) {
             col++;
         }
         imageIcon = ImageHolder.rightMan;
