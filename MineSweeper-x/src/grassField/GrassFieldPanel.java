@@ -134,13 +134,24 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
             //绘制格子
             for (int i = 0; i < cellMatrix.getRowTotal(); i++) {
                 for (int j = 0; j < cellMatrix.getColTotal(); j++) {
-                    cellMatrix.getCell(i, j).paintSelf(g, j * cellSize + 150, i * cellSize + 150, cellSize, cellSize);
+                    cellMatrix.getCell(i, j).paintSelf(g, j * cellSize + 200, i * cellSize + 150, cellSize, cellSize);
                 }
             }
 
             //绘制玩家
             if (player != null) {
-                player.paintSelf(g, player.getCol() * cellSize + 150, player.getRow() * cellSize + 150);
+                player.paintSelf(g, player.getCol() * cellSize + 200, player.getRow() * cellSize + 150);
+            }
+
+            //info
+            if (player != null) {
+                DrawTool.paintInfoBar(g, ImageHolder.playerLevel, 10,10, player.getLevel());
+                DrawTool.paintInfoBar(g, ImageHolder.playerHP, 10,10 + 55, player.getHitPoints());
+                DrawTool.paintInfoBar(g, ImageHolder.nextLevelAfter, 10,10 + 55 * 2, player.getMaxXP() - player.getCurrXP());
+                for (int i = 1; i <= 7; i++) {
+                    DrawTool.paintInfoBar(g, ImageHolder.mineLevelList[i], 10,10 + 55 * (2 + i), cellMatrix.getMinesUnclear(i));
+                }
+
             }
         } catch (NullPointerException e) {
             // ignore
@@ -148,6 +159,7 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
         }
 
         //绘制其他信息
+        /*
         g.setColor(Color.BLACK);
         String text = "<null>";
         text = "#PlayerHP:";
@@ -167,7 +179,7 @@ public class GrassFieldPanel extends JPanel implements IGamePanel {
             text += "#M-" + numberToWord[i] + ":" + cellMatrix.getMinesUnclear(i) + " ";
         }
         text += "#LUN:" + player.getMaxXP();
-        g.drawString(text, 50, 50);
+        g.drawString(text, 50, 50);*/
 
     }
 

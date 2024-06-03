@@ -48,6 +48,9 @@ public class Player {
         this.maxXP = maxXP;
     }
     private int currXP = 0;
+    public int getCurrXP() {
+        return currXP;
+    }
     private int level = 1;
     public int getLevel() {
         return level;

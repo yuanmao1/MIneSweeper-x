@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
-import java.util.Random.*;
 import java.util.Timer;
 
 import grassField.*;
@@ -96,7 +95,7 @@ abstract class Game{
 }
 class GrassField extends Game{
     GrassField(){
-        GamePanelTest.switchToGrassField(frame, 12, 18);
+        GamePanelStarter.switchToGrassField(frame, 12, 18);
         gameInit();
     }
     void gameInit(){

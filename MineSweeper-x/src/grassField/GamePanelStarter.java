@@ -1,7 +1,7 @@
 package grassField;
 import javax.swing.*;
 
-public class GamePanelTest {
+public class GamePanelStarter {
     //test code
     public static void main(String[] args) {
         JFrame frame = new JFrame();
