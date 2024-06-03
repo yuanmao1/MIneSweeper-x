@@ -1,10 +1,10 @@
 package grassField;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.ImageIcon;
+import java.awt.Graphics;
 
 public class Player {
-    //constructor...
+    //constructor
     public Player(final GrassFieldPanel gamePanel, final CellMatrix cellMatrix, final int hp) {
         if (gamePanel == null) {
             throw new IllegalArgumentException("Game panel cannot be null.");
@@ -47,8 +47,6 @@ public class Player {
     public void setMaxXP(final int maxXP) {
         this.maxXP = maxXP;
     }
-
-    // level
     private int currXP = 0;
     private int level = 1;
     public int getLevel() {
@@ -68,51 +66,34 @@ public class Player {
         }
     }
 
-
-
-
-
-
     //position on the board (row and column)
-    public static final int NOT_A_ROW = -1002;
-    private int row = NOT_A_ROW;
+    private int row = -101;
     public int getRow() {
         return row;
     }
     public void setRow(final int row) {
-        if (gamePanel == null) {
-            throw new IllegalStateException("Game panel must be set before row can be set.");
-        }
         if (row < 0 || row >= cellMatrix.getRowTotal()) {
-            throw new IllegalArgumentException("grassField.Player must be on a valid row.");
+            throw new IllegalArgumentException("Player must be on a valid row.");
         }
         this.row = row;
     }
-    public static final int NOT_A_COL = -1003;
-    private int col = NOT_A_COL;
+    private int col = -102;
     public int getCol() {
         return col;
     }
     public void setCol(final int col) {
-        if (gamePanel == null) {
-            throw new IllegalStateException("Game panel must be set before column can be set.");
-        }
         if (col < 0 || col >= cellMatrix.getColTotal()) {
-            throw new IllegalArgumentException("grassField.Player must be on a valid column.");
+            throw new IllegalArgumentException("Player must be on a valid column.");
         }
         this.col = col;
     }
-
-
 
     //paint self
     public void paintSelf(Graphics g, int x, int y) {
         if (g == null) {
             throw new IllegalArgumentException("Graphics object cannot be null.");
         }
-
         g.drawImage(imageIcon.getImage(), x, y, null);
-
         System.out.println("paint player" + " at " + x + ", " + y + "with row and col:" + row + ", " + col);
     }
 
@@ -121,9 +102,6 @@ public class Player {
 
     //move the player
     public void downMove() {
-        if (gamePanel == null) {
-            throw new IllegalStateException("Game panel must be set before row can be set.");
-        }
         if (row < cellMatrix.getRowTotal() -1) {
             row++;
         }
@@ -136,9 +114,6 @@ public class Player {
         imageIcon = ImageHolder.backMan;
     }
     public void rightMove() {
-        if (gamePanel == null) {
-            throw new IllegalStateException("Game panel must be set before column can be set.");
-        }
         if (col < cellMatrix.getColTotal() - 1) {
             col++;
         }
@@ -150,5 +125,4 @@ public class Player {
         }
         imageIcon = ImageHolder.leftMan;
     }
-
 }
