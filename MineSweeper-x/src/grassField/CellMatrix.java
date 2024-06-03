@@ -70,8 +70,8 @@ public class CellMatrix {
 
     // set some cells to be mines
     public void setAllMine(int numberOfMines) {
-        if (numberOfMines > rowTotal * colTotal - 1) {
-            throw new IllegalArgumentException("Number of mines must be less than or equal to (rowTotal * colTotal) - 1.");
+        if (numberOfMines > rowTotal * colTotal / 3) {
+            throw new IllegalArgumentException("Number of mines must be less than or equal to 1/3 of the total cells.");
         }
         if (numberOfMines < 7) {
             throw new IllegalArgumentException("Number of mines must be at least 7.");
