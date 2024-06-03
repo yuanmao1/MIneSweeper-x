@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Player {
-    //constructor
+    //constructor...
     public Player(final GrassFieldPanel gamePanel, final CellMatrix cellMatrix, final int hp) {
         if (gamePanel == null) {
             throw new IllegalArgumentException("Game panel cannot be null.");
